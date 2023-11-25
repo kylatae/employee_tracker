@@ -1,4 +1,6 @@
 const inquirer = require('inquirer');
+const db = require('db/db.js')
+
 
 qPrompt = [
   {
@@ -20,7 +22,35 @@ qPrompt = [
 
 
 function mainMenu() {
+ 
   inquirer.prompt(qPrompt)
+  .then((data=>{
+    switch(data) {
+      case 'View All Employees':
+        viewAllEmployees();
+        break;
+      case 'Add Employee':
+        addEmployee();
+        break;
+      case 'Update Employee Role':
+        updateEmployeeRole();
+        break;
+      case 'View All Roles':
+        viewAllRoles();
+        break;
+      case 'Add Role':
+        addRole();
+        break;
+      case 'View All Departments':
+        viewAllDepartments();
+        break;
+      case 'Add Department':
+        addDepartment();
+    }
+
+  }))
+
+  
 }
 
 mainMenu();
