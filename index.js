@@ -67,14 +67,57 @@ const viewAllEmployees = () =>{
     .then((data)=>{
       console.table(data[0]);
       mainMenu();    
-    })
-    .catch((err) => console.log(err));
+    }).catch((err) => console.log(err));    
 }
 
-const addEmployee = () =>{
-
-
-  mainMenu();
+const addEmployee = async () =>{
+  programLogo(`█            Add Employee           █`);
+  const roles = await db.promise().query("SELECT * FROM role");
+  var rolesDisp = [];
+  for (i = 0; i < roles[0].length; i++){
+    rolesDisp.push({
+      name: roles[0][i].title,
+      value: roles[0][i].id,
+    });
+  }
+  const[employees] = await db.promise().query("SELECT * FROM employee");
+  const employeesDisp = employees.map((employee) => ({
+    name: `${employee.first_name} ${employee.last_name}`,
+    value: employee.id 
+  }))
+  employeesDisp.push({
+    name: "No Manager",
+    value: null
+  })
+  inquirer.prompt([
+    {
+      name: "role",
+      type: "list",
+      message: "What is the new employees role?",
+      choices: rolesDisp
+    },
+    {
+      name: "first_name",
+      type: "input",
+      message: "What is the new employees first name?"
+    },
+    {
+      name: "last_name",
+      type: "input",
+      message: "What is the new employees last name?"
+    },
+    {
+      name: "manager",
+      type: "list",
+      message: "Who will the report to?",
+      choices: employeesDisp
+    }
+  ]).then((data)=>{
+    db.query(`INSERT INTO employee (first_name, last_name, manager_id, role_id) VALUES ("${data.first_name}", "${data.last_name}", "${data.manager}", "${data.role}")`);
+    programLogo(`█           Employee Added          █`);
+    console.log (`${data.first_name} ${data.last_name} has been added to the records.`)
+    mainMenu();  
+  }).catch((err) => console.log(err));
 }
 
 const updateEmployeeRole = () =>{
