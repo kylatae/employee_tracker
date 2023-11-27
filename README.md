@@ -41,6 +41,6 @@
 
 ![Site Review](./lib/img/readme.png)
 
-Video Link:[https://www.github.com/kylatae/employee_tracker/lib/vid/](https://www.github.com/kylatae/employee_tracker/lib/vid/)
+Video Link:[https://github.com/kylatae/employee_tracker/tree/main/lib/vid](https://github.com/kylatae/employee_tracker/tree/main/lib/vid)
 
 Repo Link:[https://www.github.com/kylatae/employee_tracker/](https://www.github.com/kylatae/employee_tracker/)
