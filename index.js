@@ -95,10 +95,6 @@ const addEmployee = async () =>{
     name: `${employeeMap.first_name} ${employeeMap.last_name}`,
     value: employeeMap.id 
   }))
-  employeesDisp.push({
-    name: "No Manager",
-    value: null
-  })
   inquirer.prompt([
     {
       name: "role",
@@ -182,9 +178,38 @@ const viewAllRoles = () =>{
     }).catch((err) => console.log(err));   
 }
 
-const addRole = () =>{
-
-  mainMenu(); 
+const addRole = async () =>{
+  programLogo(`█            Add New Role           █`);
+  const departments = await db.promise().query("SELECT * FROM department");
+  var deptDisp= [];
+  for (i = 0; i < departments[0].length; i++){
+    deptDisp.push({
+      name: departments[0][i].name,
+      value: departments[0][i].id
+    })
+  }
+  inquirer.prompt([
+    {
+      name: "title",
+      type: "input",
+      message: "What is the title?"
+    },
+    {
+      name: "salary",
+      type: "input",
+      message: "What is the salary?"
+    },
+    {
+      name: "department",
+      type: "list",
+      message: "Which department is the new role for?",
+      choices: deptDisp
+    }
+  ]).then((data) => {
+  db.query(`INSERT INTO role (title, salary, department_id) VALUES ("${data.title}", "${data.salary}", "${data.department}")`)
+  programLogo(`█             Role Added            █`);
+  mainMenu();  
+  }).catch((err) => console.log(err));
 }
 
 const viewAllDepartments = () =>{
@@ -197,9 +222,18 @@ const viewAllDepartments = () =>{
 }
 
 const addDepartment = () =>{
-
-
-  mainMenu();
+  programLogo(`█           Add Department          █`);
+  inquirer.prompt([
+    {
+      name: "name",
+      type: "input",
+      message: "What is the name of the new department?"
+    }
+  ]).then((data) => {
+    db.query(`INSERT INTO department (name) VALUES ("${data.name}")`)
+    programLogo(`█          Department Added         █`);
+    mainMenu();
+  })
 }
 
 const exitProgram = () =>{
